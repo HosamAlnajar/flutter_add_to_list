@@ -1,26 +1,19 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:to_do_list/services/todo_item.dart';
 
 class TaskList extends StatefulWidget {
-  String todo;
+  final List todos;
 
-  TaskList({Key key, this.todo}) : super(key: key);
+  TaskList({Key key, this.todos}) : super(key: key);
 
   @override
-  _TaskListState createState() => _TaskListState(todo);
+  _TaskListState createState() => _TaskListState(todos);
 }
 
 class _TaskListState extends State<TaskList> {
-  List<TodoItem> todos = [
-    TodoItem(index: 0, title: 'First task', completed: true),
-    TodoItem(index: 1, title: 'Second task', completed: false),
-    TodoItem(index: 2, title: 'Third task', completed: true),
-  ];
-
-  String todo;
-  String toDo;
-  _TaskListState(this.todo);
+  List todos;
+  
+  _TaskListState(this.todos);
 
   void makeTodoCompleted(index) {
     print(index);
@@ -31,24 +24,6 @@ class _TaskListState extends State<TaskList> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      if (widget.todo != null) {
-        toDo = widget.todo ?? '';
-      }
-    });
-
-    void updateTodos(todo) {
-      setState(() {
-        todos.add(TodoItem(title: todo['title']));
-      });
-    }
-
-    if (toDo != null) {
-      Map toDoo = json.decode(toDo);
-
-      updateTodos(toDoo);
-    }
-
     return Expanded(
         child: Container(
           child: ListView.builder(
