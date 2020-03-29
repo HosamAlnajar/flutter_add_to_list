@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:to_do_list/pages/create_todo_form.dart';
+import 'package:to_do_list/services/todo_item.dart';
 import '../task/WelcomeBar.dart';
 import '../task/TaskList.dart';
 
@@ -11,16 +11,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String todo;
+  Map todo;
+
+  List<TodoItem> todos = [
+    TodoItem(index: 0, title: 'First task', completed: true),
+    TodoItem(index: 1, title: 'Second task', completed: false),
+    TodoItem(index: 2, title: 'Third task', completed: true),
+  ];
 
   _navigateAndDisplaySelection(BuildContext context) async {
-    
     final result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => CreateTodoForm()),
     );
+
     setState(() {
-      todo = jsonEncode(result);
+      String todoo = jsonEncode(result);
+
+      todo = json.decode(todoo);
+
+      todos.add(TodoItem(title: todo['title']));
     });
   }
 
@@ -30,7 +40,7 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         children: <Widget>[
           WelcomeBar(name: 'Hosam', avatar: 'assets/images/icons/avatar.png'),
-          TaskList(todo: todo),
+          TaskList(todos: todos),
           FloatingActionButton(
             onPressed: () => _navigateAndDisplaySelection(context),
             tooltip: 'Add task',
