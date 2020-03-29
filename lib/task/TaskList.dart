@@ -13,18 +13,24 @@ class TaskList extends StatefulWidget {
 
 class _TaskListState extends State<TaskList> {
   List<TodoItem> todos = [
-    TodoItem(title: 'First task', completed: true),
-    TodoItem(title: 'Second task', completed: false),
-    TodoItem(title: 'Third task', completed: true),
+    TodoItem(index: 0, title: 'First task', completed: true),
+    TodoItem(index: 1, title: 'Second task', completed: false),
+    TodoItem(index: 2, title: 'Third task', completed: true),
   ];
 
   String todo;
   String toDo;
   _TaskListState(this.todo);
 
+  void makeTodoCompleted(index) {
+    print(index);
+    setState(() {
+      todos[index].completed = !todos[index].completed;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-  
     setState(() {
       if (widget.todo != null) {
         toDo = widget.todo ?? '';
@@ -34,8 +40,6 @@ class _TaskListState extends State<TaskList> {
     void updateTodos(todo) {
       setState(() {
         todos.add(TodoItem(title: todo['title']));
-
-        print(todos.length);
       });
     }
 
@@ -56,6 +60,8 @@ class _TaskListState extends State<TaskList> {
                   child: TodoItem(
                     title: todos[index].title,
                     completed: todos[index].completed,
+                    index: index,
+                    makeTodoCompleted: makeTodoCompleted,
                   ),
                 );
               }),
